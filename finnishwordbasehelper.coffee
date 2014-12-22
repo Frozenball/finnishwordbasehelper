@@ -21,6 +21,32 @@ POKURUÄNEK
 .map((x) => x.trim())
 .filter((x) => x.length == 10)
 
+filterWordsByBoard = (words, board) ->
+    getCharacterCount = (word) =>
+        count = {}
+        for c in word
+            count[c] = 0 unless count[c]?
+            count[c] += 1
+        count
+
+    getBoardCharacterCount = (board) =>
+        count = {}
+        for x in [0..board.width-1]
+            for y in [0..board.height-1]
+                c = board.get([x, y])
+                count[c] = 0 unless count[c]?
+                count[c] += 1
+        count
+
+    boardCount = getBoardCharacterCount(board)
+    words.filter (word) =>
+        wordCount = getCharacterCount(word.toUpperCase())
+        for letter, count of wordCount
+            unless boardCount[letter] or boardCount[letter] < count
+                return false
+        return true
+
+
 class Tri
     MATCH_EXACT = 2
     MATCH_PREFIX = 1
@@ -96,6 +122,12 @@ console.log board.length
 console.log board[12]
 
 
-tri = new Tri(words)
 solver = new BoardSolver(board)
+console.log "Words", words.length
+words = filterWordsByBoard(words, solver)
+console.log "Words (after)", words.length
+tri = new Tri(words)
+
+
+
 solver.solve(tri)
