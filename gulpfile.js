@@ -33,10 +33,8 @@ gulp.task('coffee', function() {
 
 gulp.task('deploy', function () {
     return gulp.src([
-        'index.html',
-        'build',
-        'bower_components',
-        'words'
+        './**',
+        '!node_modules/**'
     ])
     .pipe(deploy());
 });
