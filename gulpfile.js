@@ -38,7 +38,7 @@ gulp.task('deploy', function () {
         'bower_components',
         'words'
     ])
-    .pipe(deploy({push: false}));
+    .pipe(deploy());
 });
 
 // Concatenate & Minify JS
