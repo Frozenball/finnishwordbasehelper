@@ -1,3 +1,14 @@
+equals = (arr1, arr2) ->
+    return false if arr1.length != arr2.length
+    for i in [0..arr1.length-1]
+        return false if arr1[i] != arr2[i]
+    return true
+
+inArray = (array, value) ->
+    for each in array
+        return true if equals(each, value)
+    return false
+
 boardStringToArray = (boardString) ->
     boardString
     .split("\n")
@@ -31,5 +42,7 @@ filterWordsByBoard = (words, board) ->
 
 module.exports = {
     boardStringToArray: boardStringToArray,
-    filterWordsByBoard: filterWordsByBoard
+    filterWordsByBoard: filterWordsByBoard,
+    inArray: inArray,
+    equals: equals
 }

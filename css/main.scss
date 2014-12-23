@@ -1,12 +1,28 @@
 $width: 10;
 $height: 13;
+$player0: #e67e22;
+$player0-darker: #d35400;
+$player1: #3498db;
+$player1-darker: #2980b9;
 
-.words-root {
+body, h1, h2, h3, h4, h4 {
+  font-family: 'Open Sans', sans-serif;
+  padding-bottom: 20px;
+}
+.base {
+  width: 50px * $width + 4px;
+  margin: 0px auto;
+}
+.header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.words-letters {
   width: 50px * $width + 4px;
   height: 50px * $height + 4px;
   border: 1px #95a5a6 solid;
   padding: 1px;
-  clear: left;
+  clear: left;  
 }
 .word-letter {
   width: 50px;
@@ -15,20 +31,23 @@ $height: 13;
   line-height: 50px;
   text-align: center;
   font-size: 23px;
-}
-.word-letter.player0 {
-  background-color: #e67e22;
-}
-.word-letter.player1 {
-  background-color: #3498db;
-}
-.word-letter.selected {
-  background-color: #ecf0f1;
   &.player0 {
-    background-color: #d35400;
+    background-color: $player0;
+    &.highlight {
+      background-color: $player0-darker;
+    }
   }
   &.player1 {
-    background-color: #2980b9;
+    background-color: $player1;
+    &.highlight {
+      background-color: $player1-darker;
+    }
+  }
+  &.selected {
+    font-weight: bold;
+  }
+  &.highlight {
+    background-color: #bdc3c7;
   }
 }
 .words-console {
@@ -40,4 +59,19 @@ $height: 13;
 }
 .words-buttons {
   padding-top: 20px;
+}
+.player-button {
+  .player0, .player1 {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-bottom: -3px;
+    margin-right: 5px;
+  }
+  .player0 {
+    background-color: $player0;
+  }
+  .player1 {
+    background-color: $player1;
+  }
 }

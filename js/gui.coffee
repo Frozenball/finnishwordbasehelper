@@ -5,13 +5,36 @@ Trie = require('./trie')
 utils = require('./utils')
 LETTERS = 'VOKAALITOOAEEULOKAKAUSIJUTTU'
 
+ALLOW_CHANGES = false
+KEY_LEFT = 37
+KEY_UP = 38
+KEY_RIGHT = 39
+KEY_DOWN = 40
+KEY_ESCAPE = 27
+KEY_COMMA = 188
+KEY_DOT = 190
+
 class App
     constructor: ->
         @selected = null
         @width = 10
         @height = 13
         @root = $('.words-root')
+        @highlight = []
+        
+    log: (message) ->
+        @root.find('.words-console').append($('
+            <div class="note"></div>
+        ').text(message))
 
+    init: ->
+        @log('Application initialized')
+        @initBoard()
+        @updateGUI()
+        @bind()
+        @loadTrie()
+
+    initBoard: ->
         if window.location.hash and window.location.hash[0..1] == '#{'
             data = $.parseJSON(window.location.hash[1..])
             @board = new BoardSolver(data.board, data.positionBoard, parseInt(data.player, 10))
@@ -27,17 +50,6 @@ class App
             positionBoard.push '1111111111'.split('')
             @board = new BoardSolver(board, positionBoard, 0)
         throw "Root was not found" unless @root[0]
-        
-    log: (message) ->
-        @root.find('.words-console').append($('
-            <div class="note"></div>
-        ').text(message))
-
-    init: ->
-        @log('Application initialized')
-        @initLetters()
-        @bind()
-        @loadTrie()
 
     loadTrie: (callback) ->
         @tri = null
@@ -50,7 +62,11 @@ class App
             @log('Trie tree was built on '+((Date.now() - time_start)/1000)+' seconds')
             callback() if callback?
 
-    initLetters: ->
+    updateGUI: ->
+        @updateLetters()
+        @updateButtons()
+
+    updateLetters: ->
         @root.find('.words-letters').empty()
         for y in [0..@height-1]
             for x in [0..@width-1]
@@ -62,47 +78,96 @@ class App
                 $letter.addClass('player' + @board.getPosition([x, y])) if @board.getPosition([x, y]) != '.'
                 if @selected and @selected[0] == x and @selected[1] == y
                     $letter.addClass('selected')
+                if utils.inArray(@highlight, [x, y])
+                    $letter.addClass('highlight')
                 @root.find('.words-letters').append($letter)
+
+    updateButtons: ->
+        @root.find('.js-player > span').removeClass('player0').removeClass('player1')
+        @root.find('.js-player > span').addClass('player'+@board.player)
+
+        if @selected
+            @root.find('.js-find-word').removeClass('disabled')
+        else
+            @root.find('.js-find-word').addClass('disabled')
 
     bind: ->
         @root.on 'click', '.word-letter', (e) =>
+            e.preventDefault()
             @root.find('.word-letter').removeClass('selected')
             $(e.target).addClass('selected')
             @selected = [$(e.target).data('x'), $(e.target).data('y')]
+            @updateGUI()
+
+        @root.on 'click', '.js-find-word', (e) =>
+            e.preventDefault()
+            @solve(@selected)
+
         @root.on 'click', '.js-solve', (e) =>
+            e.preventDefault()
             @solve()
-        $('html').keypress (e) =>
+
+        @root.on 'click', '.js-player', (e) =>
+            e.preventDefault()
+            @board.player = @board.opposite(@board.player)
+            console.log @board.player
+            @updateGUI()
+
+        $('html').keydown (e) =>
             if @selected
-                c = String.fromCharCode(e.which).toUpperCase()
-
-                if c == '0'
-                    @board.setPosition(@selected, '.')
-                else if c == '1'
-                    @board.setPosition(@selected, '0')
-                else if c == '2'
-                    @board.setPosition(@selected, '1')
-                else
-                    @board.set(@selected, c)
+                e.preventDefault()
+                console.log e.which
+                if e.which == KEY_ESCAPE
+                    @selected = null
+                else if e.which == KEY_UP
+                    @selected[1] -= 1
+                else if e.which == KEY_DOWN
+                    @selected[1] += 1
+                else if e.which == KEY_RIGHT
                     @selected[0] += 1
-                    if @selected[0] >= @width
-                        @selected[0] = 0
-                        @selected[1] += 1
-                    if @selected[1] >= @height
-                        @selected = [0, 0]
-                @updateHash()
-                @initLetters()
+                else if e.which == KEY_LEFT
+                    @selected[0] -= 1
+                else if e.which == KEY_COMMA
+                    @solve(@selected)
+                else if e.which == KEY_DOT
+                    @solve()
+                else
+                    c = String.fromCharCode(e.which).toUpperCase()
+                    if c == '0'
+                        @board.setPosition(@selected, '.')
+                    else if c == '1'
+                        @board.setPosition(@selected, '0')
+                    else if c == '2'
+                        @board.setPosition(@selected, '1')
+                    else if ALLOW_CHANGES
+                        @board.set(@selected, c)
+                        @selected[0] += 1
 
-    solve: ->
+                if @selected[0] >= @width
+                    @selected[0] = 0
+                    @selected[1] += 1
+                if @selected[1] >= @height
+                    @selected = [0, 0]
+                if @selected[0] < 0
+                    @selected[0] = @width-1
+                if @selected[1] < 0
+                    @selected[1] = @height-1
+
+                @updateHash()
+                @updateGUI()
+
+    solve: (startingPosition=false) ->
         throw "Trie tree is not built yet" unless @trie
-        foundWords = @board.solve(@trie)
+        foundWords = @board.solve(@trie, startingPosition)
         if foundWords.length >= 1
             @log("Best solution is #{foundWords[0][0]}")
             solutions = foundWords.slice(1, 10).map (x) => x[0]
             @log("Other solutions: "+solutions.join(", "))
+            @highlight = foundWords[0][1]
+            @updateGUI()
             #@board.useWord(foundWords[0][0])
             #for pos in foundWords[0][1]
             #    @board.setPosition(pos, ''+@board.player)
-            #@initLetters()
             #@board.player = ''+@board.opposite(@board.player)
         else
             @log("No solution was found. ")

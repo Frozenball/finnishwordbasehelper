@@ -4,20 +4,36 @@
     <title>Finnish Wordbase Helper</title>
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link href="build/css/main.css" rel="stylesheet" media="screen">
     <script src="build/js/app.js"></script>
   </head>
   <body>
-    <div class ="container">
-      <h1>Finnish WordBase Helper</h1>
+    <div class="base">
+      <div class="header">
+        <h1>Finnish WordBase Helper</h1>
+      </div>
       <div class="words-root">
-        <div class="words-letters clearfix"></div>
+        <div class="words-letters"></div>
         <div class="words-buttons">
+          <button type="button" class="btn btn-default js-find-word">
+            Solve for selected
+          </button>
           <button type="button" class="btn btn-default js-solve">
-            Solve
+            Solve for best move
+          </button>
+          <button type="button" class="btn btn-default player-button js-player">
+            <span class="player0"></span>
+            Player
           </button>
         </div>
         <div class="words-console"></div>
+      </div>
+      <div class="readme">
+        <p>This is a simple word finder for games such as WordBase.
+Supports Finnish language using <a href="http://kaino.kotus.fi/sanat/nykysuomi/">KOTUS words</a>.</p>
+        <h3>Usage</h3>
+        <p>You can select letters from the board and change whose player it is by pressing 1, 2 or 0. Changing the letters individually is not possible but you can always generate a whole new board.</p>
       </div>
     </div>
   </body>

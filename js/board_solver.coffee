@@ -59,6 +59,8 @@ class BoardSolver
                 buf += getCharacter([x, y])
 
     evaluate: (positions) ->
+        SCORE_VICTORY = 1000000000000
+
         taken = (position) =>
             for takenPosition in position
                 if takenPosition[0] == position[0] and takenPosition[1] == position[1]
@@ -75,11 +77,13 @@ class BoardSolver
                 factor = 1
             if @player == '0'
                 score += position[1]**2 * factor
+                score += SCORE_VICTORY if position[1] == @height-1
             else
                 score += (@height - position[1])**2 * factor
+                score += SCORE_VICTORY if position[1] == 0
         return score
 
-    solve: (trie) ->
+    solve: (trie, startingPosition=false) ->
         findNeighbors = (position) =>
             xys = []
             xys.push [position[0]+i, position[1]+j] for i in [-1..1] for j in [-1..1] when not (i == 0 and j == 0)
@@ -111,8 +115,11 @@ class BoardSolver
                     newPositions.push(potentialPosition)
                     recursiveSolve(word, newPositions)
 
-        for pos in @getPlayerPositions(@player)
-            recursiveSolve('', [pos])
+        if startingPosition
+            recursiveSolve('', [startingPosition])
+        else
+            for pos in @getPlayerPositions(@player)
+                recursiveSolve('', [pos])
 
         foundWords.sort (a, b) => b[2] - a[2]
         foundWords.filter (row) =>
