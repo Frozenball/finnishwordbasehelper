@@ -10,6 +10,7 @@ var coffee = require('gulp-coffee');
 var gutil = require('gulp-util');
 var browserify = require('gulp-browserify');
 var connect = require('gulp-connect');
+var deploy = require('gulp-gh-pages');
  
  
 gulp.task('default', ['webserver']);
@@ -28,6 +29,16 @@ gulp.task('coffee', function() {
             coffee({bare: true}).on('error', gutil.log)
         )
         .pipe(gulp.dest('js'))
+});
+
+gulp.task('deploy', function () {
+    return gulp.src([
+        'index.html',
+        'build',
+        'bower_components',
+        'words'
+    ])
+    .pipe(deploy({push: false}));
 });
 
 // Concatenate & Minify JS
