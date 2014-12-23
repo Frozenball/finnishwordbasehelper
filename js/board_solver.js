@@ -252,7 +252,6 @@ BoardSolver = (function() {
   };
 
   BoardSolver.prototype.useWord = function(word) {
-    console.log(this.usedWords);
     return this.usedWords.push(word);
   };
 

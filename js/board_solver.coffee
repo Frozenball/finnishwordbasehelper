@@ -98,7 +98,6 @@ class BoardSolver
         foundWords = []
         recursiveSolve = (word, positions) =>
             lastPosition = positions[positions.length - 1]
-            #console.log "last", lastPosition
             character = @get(lastPosition)
             throw "Invalid position #{lastPosition}" unless character
             word = word + character
@@ -136,7 +135,6 @@ class BoardSolver
         return foundWords
 
     useWord: (word) =>
-        console.log @usedWords
         @usedWords.push(word)
 
 module.exports = BoardSolver

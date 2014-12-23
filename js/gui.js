@@ -169,7 +169,6 @@ App = (function() {
       return function(e) {
         e.preventDefault();
         _this.board.player = _this.board.opposite(_this.board.player);
-        console.log(_this.board.player);
         return _this.updateGUI();
       };
     })(this));
@@ -178,7 +177,6 @@ App = (function() {
         var c;
         if (_this.selected) {
           e.preventDefault();
-          console.log(e.which);
           if (e.which === KEY_ESCAPE) {
             _this.selected = null;
           } else if (e.which === KEY_UP) {
@@ -264,7 +262,6 @@ App = (function() {
 })();
 
 init = function() {
-  console.log("asd");
   return $((function(_this) {
     return function() {
       var app;
