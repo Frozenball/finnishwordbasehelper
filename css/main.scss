@@ -1,0 +1,43 @@
+$width: 10;
+$height: 13;
+
+.words-root {
+  width: 50px * $width + 4px;
+  height: 50px * $height + 4px;
+  border: 1px #95a5a6 solid;
+  padding: 1px;
+  clear: left;
+}
+.word-letter {
+  width: 50px;
+  height: 50px;
+  float: left;
+  line-height: 50px;
+  text-align: center;
+  font-size: 23px;
+}
+.word-letter.player0 {
+  background-color: #e67e22;
+}
+.word-letter.player1 {
+  background-color: #3498db;
+}
+.word-letter.selected {
+  background-color: #ecf0f1;
+  &.player0 {
+    background-color: #d35400;
+  }
+  &.player1 {
+    background-color: #2980b9;
+  }
+}
+.words-console {
+  padding: 10px;
+  padding-top: 20px;
+  .note {
+    color: #7f8c8d;
+  }
+}
+.words-buttons {
+  padding-top: 20px;
+}
