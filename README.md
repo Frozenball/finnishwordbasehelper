@@ -2,7 +2,7 @@ Finnish WordBase Helper
 =====================
 
 This is a simple word finder for games such as WordBase.
-Supports Finnish language using [KOTUS words](http://kaino.kotus.fi/sanat/nykysuomi/).
+Supports Finnish language using [KOTUS words](http://kaino.kotus.fi/sanat/nykysuomi/). [Check the demo](http://frozenball.github.io/finnishwordbasehelper).
 
 Installation
 ------
