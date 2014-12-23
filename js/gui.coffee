@@ -1,7 +1,7 @@
 #$ = require('jquery-browserify')
 $ = require('jquery')
 BoardSolver = require('./board_solver')
-Tri = require('./tri')
+Trie = require('./trie')
 utils = require('./utils')
 LETTERS = 'VOKAALITOOAEEULOKAKAUSIJUTTU'
 
@@ -37,17 +37,17 @@ class App
         @log('Application initialized')
         @initLetters()
         @bind()
-        @loadTri()
+        @loadTrie()
 
-    loadTri: (callback) ->
+    loadTrie: (callback) ->
         @tri = null
         $.get 'words/kotus/kotus_sanat.txt', (words) =>
             wordCount = words.split("\n").length
             @log("Fetched #{wordCount} words")
             time_start = Date.now()
-            @tri = new Tri(words.split("\n").map( (x) => x.trim() ))
-            throw "Sanity check 1 failed" unless @tri.findMatch("juust") >= 1
-            @log('Tri tree was built on '+((Date.now() - time_start)/1000)+' seconds')
+            @trie = new Trie(words.split("\n").map( (x) => x.trim() ))
+            throw "Sanity check 1 failed" unless @trie.findMatch("juust") >= 1
+            @log('Trie tree was built on '+((Date.now() - time_start)/1000)+' seconds')
             callback() if callback?
 
     initLetters: ->
@@ -93,8 +93,8 @@ class App
                 @initLetters()
 
     solve: ->
-        throw "Tri tree is not built yet" unless @tri
-        foundWords = @board.solve(@tri)
+        throw "Trie tree is not built yet" unless @trie
+        foundWords = @board.solve(@trie)
         if foundWords.length >= 1
             @log("Best solution is #{foundWords[0][0]}")
             solutions = foundWords.slice(1, 10).map (x) => x[0]

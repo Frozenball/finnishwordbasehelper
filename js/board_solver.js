@@ -137,7 +137,7 @@ BoardSolver = (function() {
     return score;
   };
 
-  BoardSolver.prototype.solve = function(tri) {
+  BoardSolver.prototype.solve = function(trie) {
     var filterVisited, findNeighbors, foundWords, pos, recursiveSolve, _i, _len, _ref;
     findNeighbors = (function(_this) {
       return function(position) {
@@ -179,7 +179,7 @@ BoardSolver = (function() {
           throw "Invalid position " + lastPosition;
         }
         word = word + character;
-        match = tri.findMatch(word);
+        match = trie.findMatch(word);
         if (match === 0) {
           return false;
         } else {

@@ -79,7 +79,7 @@ class BoardSolver
                 score += (@height - position[1])**2 * factor
         return score
 
-    solve: (tri) ->
+    solve: (trie) ->
         findNeighbors = (position) =>
             xys = []
             xys.push [position[0]+i, position[1]+j] for i in [-1..1] for j in [-1..1] when not (i == 0 and j == 0)
@@ -98,7 +98,7 @@ class BoardSolver
             character = @get(lastPosition)
             throw "Invalid position #{lastPosition}" unless character
             word = word + character
-            match = tri.findMatch(word)
+            match = trie.findMatch(word)
             if match == 0
                 return false
             else

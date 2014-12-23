@@ -1,6 +1,6 @@
-var Tri;
+var Trie;
 
-Tri = (function() {
+Trie = (function() {
   var MATCH_EXACT, MATCH_NONE, MATCH_PREFIX;
 
   MATCH_EXACT = 2;
@@ -9,7 +9,7 @@ Tri = (function() {
 
   MATCH_NONE = 0;
 
-  function Tri(words) {
+  function Trie(words) {
     var word, _i, _len;
     this.tree = {};
     for (_i = 0, _len = words.length; _i < _len; _i++) {
@@ -18,7 +18,7 @@ Tri = (function() {
     }
   }
 
-  Tri.prototype.add = function(word) {
+  Trie.prototype.add = function(word) {
     var c, subtree, _i, _len;
     subtree = this.tree;
     for (_i = 0, _len = word.length; _i < _len; _i++) {
@@ -31,7 +31,7 @@ Tri = (function() {
     return subtree['$'] = true;
   };
 
-  Tri.prototype.findMatch = function(prefix) {
+  Trie.prototype.findMatch = function(prefix) {
     var c, subtree, _i, _len;
     prefix = prefix.toLowerCase();
     subtree = this.tree;
@@ -49,8 +49,8 @@ Tri = (function() {
     }
   };
 
-  return Tri;
+  return Trie;
 
 })();
 
-module.exports = Tri;
+module.exports = Trie;

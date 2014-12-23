@@ -1,10 +1,10 @@
-var $, App, BoardSolver, LETTERS, Tri, init, utils;
+var $, App, BoardSolver, LETTERS, Trie, init, utils;
 
 $ = require('jquery');
 
 BoardSolver = require('./board_solver');
 
-Tri = require('./tri');
+Trie = require('./trie');
 
 utils = require('./utils');
 
@@ -53,10 +53,10 @@ App = (function() {
     this.log('Application initialized');
     this.initLetters();
     this.bind();
-    return this.loadTri();
+    return this.loadTrie();
   };
 
-  App.prototype.loadTri = function(callback) {
+  App.prototype.loadTrie = function(callback) {
     this.tri = null;
     return $.get('words/kotus/kotus_sanat.txt', (function(_this) {
       return function(words) {
@@ -64,13 +64,13 @@ App = (function() {
         wordCount = words.split("\n").length;
         _this.log("Fetched " + wordCount + " words");
         time_start = Date.now();
-        _this.tri = new Tri(words.split("\n").map(function(x) {
+        _this.trie = new Trie(words.split("\n").map(function(x) {
           return x.trim();
         }));
-        if (!(_this.tri.findMatch("juust") >= 1)) {
+        if (!(_this.trie.findMatch("juust") >= 1)) {
           throw "Sanity check 1 failed";
         }
-        _this.log('Tri tree was built on ' + ((Date.now() - time_start) / 1000) + ' seconds');
+        _this.log('Trie tree was built on ' + ((Date.now() - time_start) / 1000) + ' seconds');
         if (callback != null) {
           return callback();
         }
@@ -148,10 +148,10 @@ App = (function() {
 
   App.prototype.solve = function() {
     var foundWords, solutions;
-    if (!this.tri) {
-      throw "Tri tree is not built yet";
+    if (!this.trie) {
+      throw "Trie tree is not built yet";
     }
-    foundWords = this.board.solve(this.tri);
+    foundWords = this.board.solve(this.trie);
     if (foundWords.length >= 1) {
       this.log("Best solution is " + foundWords[0][0]);
       solutions = foundWords.slice(1, 10).map((function(_this) {
