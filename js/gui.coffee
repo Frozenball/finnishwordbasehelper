@@ -110,13 +110,11 @@ class App
         @root.on 'click', '.js-player', (e) =>
             e.preventDefault()
             @board.player = @board.opposite(@board.player)
-            console.log @board.player
             @updateGUI()
 
         $('html').keydown (e) =>
             if @selected
                 e.preventDefault()
-                console.log e.which
                 if e.which == KEY_ESCAPE
                     @selected = null
                 else if e.which == KEY_UP
@@ -165,10 +163,6 @@ class App
             @log("Other solutions: "+solutions.join(", "))
             @highlight = foundWords[0][1]
             @updateGUI()
-            #@board.useWord(foundWords[0][0])
-            #for pos in foundWords[0][1]
-            #    @board.setPosition(pos, ''+@board.player)
-            #@board.player = ''+@board.opposite(@board.player)
         else
             @log("No solution was found. ")
 
@@ -182,7 +176,6 @@ class App
 
 
 init = ->
-    console.log "asd"
     $ =>
         app = new App()
         app.init()

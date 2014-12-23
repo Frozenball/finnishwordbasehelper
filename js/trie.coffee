@@ -10,7 +10,6 @@ class Trie
     add: (word) ->
         subtree = @tree
         for c in word
-            #console.log "character", c, "Tree:", @tree, "Subtree:", subtree
             unless subtree[c]?
                 subtree[c] = {}
             subtree = subtree[c]
